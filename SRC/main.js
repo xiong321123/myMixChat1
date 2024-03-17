@@ -1,15 +1,16 @@
 const { MixinApi } = require('@mixin.dev/mixin-node-sdk');
 const keystore=require('./keystore');
-// const keystore = {
-//     app_id: "cbaa6b46-11b3-4bb0-aa77-4a91162683e4",
-//     session_id: "aa6cd5da-9d1c-4839-b1e8-175625c4f6cf",
-//     server_public_key: "9e53982b3c8873be506e1e7431f117cfa91a0db87646a1d79010e1bf61d4338d",
-//     session_private_key: "938215f49a2733b12b6f78f1b592dd3b2d81ea40daff757c368984a13e3a25af",
-//   };
-console.log(keystore);
+
+// console.log(keystore);
 
 
-
+const config = {
+  keystore,
+  blazeOptions: {
+    parse: true,
+    syncAck: true,
+  },
+};
 
  
 // const config=require('./config');
@@ -70,8 +71,8 @@ console.log(keystore);
 
 
 
-
-const client = MixinApi({ keystore });
+const client = MixinApi(config);
+// const client = MixinApi({ keystore });
 
 // Use Promise
 // client.user.profile().then(console.log);
@@ -83,19 +84,18 @@ async function getMe() {
   // console.log(`name:${me.app.name},\napp_id:${me.app.app_id},\napp_number:${me.app.app_number},\ndescription:${me.app.description},\ncreator_id:${me.app.creator_id},\n`)
   // console.log(me);
 }
-getMe()
+// getMe()
 
 
 
 async function zuoye2(data){
-
  const result0 = await client.user.fetch(data);
-//  console.log(result0);
- const user_id = result0.user_id;
-//  console.log(user_id);
-  const result = await client.user.fetchList([user_id]);
-  console.log(result);
-}
+ console.log(result0);}
+//  zuoye2('41102708')
+//  const user_id = result0.user_id;
+//   const result = await client.user.fetchList([user_id])
+  
+// }
 // zuoye2('41102708')
 
 async function zuoye3(data){
@@ -111,11 +111,32 @@ async function zuoye3(data){
 }
 
 }
-
+// zuoye3(['41102708']);
 // zuoye3(['41102708','7000104824','7000104341','7000102069','7000105018'])
 
 
-// async function zuoye9(){
-// const kk=await client.user.fetchList(['df72710b-f932-4ff4-8440-641c6a1c8b8f'])
-// console.log(kk)}
+async function zuoye9(){
+const kk=await client.user.fetchList(['a840dd01-8bb4-4590-930a-21452ea2d6e6'])
+console.log(kk)}
 // zuoye9()
+
+// client.blaze.loop({
+//   onMessage(msg) {
+//     // console.log(msg);
+//     // console.log(msg.user_id);
+//     // console.log(client.user.fetchList([msg.user_id]));
+//     async function zuoye9(){
+//       const kk=await client.user.fetchList([`${msg.user_id}`])
+//       console.log(`${kk[0].full_name} 给你发送了："${msg.data}"`);}
+//       zuoye9()
+//   },
+// });
+client.blaze.loop({
+  async onMessage(msg) {
+    console.log(msg);
+    await client.message.sendText(msg.user_id,"加油")
+   },
+    
+  async onAckReceipt(msg){},
+    
+});
